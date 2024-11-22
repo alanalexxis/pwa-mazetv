@@ -27,14 +27,14 @@
                     class="flex flex-col items-center justify-between space-y-4 md:flex-row md:space-y-0"
                 >
                     <a
-                        href="/"
+                        href="/dashboard"
                         class="text-3xl font-bold text-red-500 transition duration-300 hover:text-red-400"
                     >
                         MazePWA
                     </a>
                     <div class="flex items-center space-x-4">
                         <form
-                            action="{{ route("movies.search") }}"
+                            action="{{ route("dashboard") }}"
                             method="GET"
                             class="flex w-full md:w-auto"
                         >
@@ -81,7 +81,7 @@
                                         d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                                     />
                                 </svg>
-                                <span>Usuario</span>
+                                <span></span>
                             </button>
                             <div
                                 x-show="open"
@@ -110,10 +110,10 @@
                                             clip-rule="evenodd"
                                         />
                                     </svg>
-                                    Nombre
+                                    {{ Auth::user()->name }}
                                 </a>
                                 <a
-                                    href="#"
+                                    href="/profile"
                                     class="flex items-center px-4 py-2 text-sm text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100"
                                 >
                                     <svg
@@ -134,6 +134,7 @@
                                 <a
                                     href="#"
                                     class="flex items-center px-4 py-2 text-sm text-red-600 transition duration-150 ease-in-out hover:bg-gray-100"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
@@ -149,6 +150,15 @@
                                     </svg>
                                     Cerrar sesión
                                 </a>
+
+                                <form
+                                    id="logout-form"
+                                    method="POST"
+                                    action="{{ route("logout") }}"
+                                    style="display: none"
+                                >
+                                    @csrf
+                                </form>
                             </div>
                         </div>
                     </div>

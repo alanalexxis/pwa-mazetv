@@ -1,1 +1,1 @@
-<x-app-layout></x-app-layout>
+@include("movies.search")

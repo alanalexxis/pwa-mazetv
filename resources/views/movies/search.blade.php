@@ -47,6 +47,12 @@
                             >
                                 Más Información
                             </a>
+                            <button
+                                class="mt-2 rounded-full bg-yellow-500 px-4 py-2 text-center text-white transition-colors duration-300 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+                                onclick="addToFavorites('{{ $show["show"]["id"] }}')"
+                            >
+                                Añadir a Favoritos
+                            </button>
                         </div>
                     </div>
                 @endforeach
@@ -79,4 +85,11 @@
             </div>
         @endif
     </div>
+
+    <script>
+        function addToFavorites(showId) {
+            // Aquí puedes agregar la lógica para añadir a favoritos
+            alert('Añadido a favoritos: ' + showId);
+        }
+    </script>
 @endsection
