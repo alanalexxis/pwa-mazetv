@@ -21,9 +21,5 @@ Route::middleware('auth')->group(function () {
 });
 
 
-
-
-
-
 Route::post('/like-show', [LikedShowController::class, 'toggle'])->name('like.show');
 require __DIR__.'/auth.php';
