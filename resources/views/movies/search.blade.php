@@ -26,7 +26,7 @@
                             class="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-110"
                         />
                         <div
-                            class="movie-overlay absolute inset-0 flex flex-col justify-end p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                            class="movie-overlay absolute inset-0 flex flex-col justify-end bg-black bg-opacity-50 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                         >
                             <h3
                                 class="mb-2 truncate text-lg font-bold text-white"
@@ -48,10 +48,24 @@
                                 Más Información
                             </a>
                             <button
-                                class="mt-2 rounded-full bg-yellow-500 px-4 py-2 text-center text-white transition-colors duration-300 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
-                                onclick="addToFavorites('{{ $show["show"]["id"] }}')"
+                                class="favorite-btn absolute right-2 top-2 z-10 rounded-full bg-white p-2 text-red-500 opacity-0 transition-opacity duration-300 hover:text-red-600 group-hover:opacity-100"
+                                onclick="toggleFavorite(this, '{{ $show["show"]["id"] }}')"
+                                aria-label="Añadir a favoritos"
                             >
-                                Añadir a Favoritos
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                                    />
+                                </svg>
                             </button>
                         </div>
                     </div>
