@@ -8,7 +8,7 @@
             </h2>
         @else
             <h2 class="mb-8 text-center text-4xl font-bold text-red-500">
-                Mis shows guardados
+                Mis shows favoritos
             </h2>
         @endif
 
@@ -100,12 +100,13 @@
                     ></path>
                 </svg>
                 <p class="text-center text-xl text-gray-400">
-                    No se encontraron shows.
+                    No se encontraron películas que coincidan con tu búsqueda.
                 </p>
                 <a
+                    href="/"
                     class="mt-4 rounded-full bg-red-500 px-6 py-2 text-white transition-colors duration-300 hover:bg-red-600"
                 >
-                    Prueba a buscar o añadir shows
+                    Volver al inicio
                 </a>
             </div>
         @endif

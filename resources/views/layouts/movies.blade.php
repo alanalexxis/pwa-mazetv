@@ -95,7 +95,7 @@
                                 class="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-2 shadow-xl ring-1 ring-black ring-opacity-5"
                             >
                                 <a
-                                    href="#"
+                                    href="/dashboard"
                                     class="flex items-center px-4 py-2 text-sm text-gray-700 transition duration-150 ease-in-out hover:bg-gray-100"
                                 >
                                     <svg
@@ -110,7 +110,7 @@
                                             clip-rule="evenodd"
                                         />
                                     </svg>
-                                    {{ Auth::user()->name }}
+                                    Hola {{ Auth::user()->name }}
                                 </a>
                                 <a
                                     href="/profile"
