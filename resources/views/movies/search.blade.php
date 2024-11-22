@@ -48,16 +48,18 @@
                                 Más Información
                             </a>
                             <button
-                                class="favorite-btn absolute right-2 top-2 z-10 rounded-full bg-white p-2 text-red-500 opacity-0 transition-opacity duration-300 hover:text-red-600 group-hover:opacity-100"
-                                onclick="toggleFavorite(this, '{{ $show["show"]["id"] }}')"
+                                class="favorite-btn absolute right-2 top-2 z-10 rounded-full bg-white p-2 text-red-500 opacity-0 transition-all duration-300 hover:text-red-600 group-hover:opacity-100"
+                                onclick="toggleFavorite(this, '{{ $show["show"]["id"] }}', '{{ $show["show"]["name"] }}')"
                                 aria-label="Añadir a favoritos"
+                                data-show-id="{{ $show["show"]["id"] }}"
+                                data-show-name="{{ $show["show"]["name"] }}"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    class="h-6 w-6"
-                                    fill="none"
+                                    class="h-6 w-6 transition-all duration-300"
                                     viewBox="0 0 24 24"
                                     stroke="currentColor"
+                                    fill="none"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -67,6 +69,16 @@
                                     />
                                 </svg>
                             </button>
+                            <div
+                                class="favorite-message absolute left-2 top-2 z-10 rounded-full bg-white px-2 py-1 text-sm text-red-500 opacity-0 transition-all duration-300"
+                            >
+                                <span class="add-message">
+                                    Agregado a favoritos
+                                </span>
+                                <span class="remove-message hidden">
+                                    Eliminado de favoritos
+                                </span>
+                            </div>
                         </div>
                     </div>
                 @endforeach
@@ -101,9 +113,105 @@
     </div>
 
     <script>
-        function addToFavorites(showId) {
-            // Aquí puedes agregar la lógica para añadir a favoritos
-            alert('Añadido a favoritos: ' + showId);
+        function toggleFavorite(button, showId, showName) {
+            console.log('Show ID:', showId);
+            console.log('Show Name:', showName);
+
+            // Add animation classes
+            button.classList.add('animate-favorite');
+            const icon = button.querySelector('svg');
+            icon.classList.add('animate-favorite-icon');
+
+            // Get the favorite message element
+            const favoriteMessage =
+                button.parentElement.querySelector('.favorite-message');
+            const addMessage = favoriteMessage.querySelector('.add-message');
+            const removeMessage =
+                favoriteMessage.querySelector('.remove-message');
+
+            fetch('{{ route("like.show") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                body: JSON.stringify({
+                    show_id: showId,
+                    show_name: showName,
+                }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(data);
+                    if (data.success) {
+                        const isFavorited = data.action === 'added';
+                        button.classList.toggle('text-red-600', isFavorited);
+                        icon.classList.toggle('fill-current', isFavorited);
+
+                        // Show the appropriate message
+                        favoriteMessage.classList.remove('opacity-0');
+                        favoriteMessage.classList.add('opacity-100');
+                        if (isFavorited) {
+                            addMessage.classList.remove('hidden');
+                            removeMessage.classList.add('hidden');
+                        } else {
+                            addMessage.classList.add('hidden');
+                            removeMessage.classList.remove('hidden');
+                        }
+
+                        // Hide the favorite message after 2 seconds
+                        setTimeout(() => {
+                            favoriteMessage.classList.remove('opacity-100');
+                            favoriteMessage.classList.add('opacity-0');
+                        }, 2000);
+                    }
+                })
+                .catch((error) => console.error('Error:', error))
+                .finally(() => {
+                    // Remove animation classes after animation completes
+                    setTimeout(() => {
+                        button.classList.remove('animate-favorite');
+                        icon.classList.remove('animate-favorite-icon');
+                    }, 500);
+                });
         }
     </script>
+
+    <style>
+        @keyframes favorite {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes favorite-icon {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.3);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .animate-favorite {
+            animation: favorite 0.5s ease-in-out;
+        }
+
+        .animate-favorite-icon {
+            animation: favorite-icon 0.5s ease-in-out;
+        }
+
+        .favorite-message {
+            transition: opacity 0.3s ease-in-out;
+        }
+    </style>
 @endsection
