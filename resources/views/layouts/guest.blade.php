@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>@yield("title", "MazePWA")</title>
+        <title>@yield("title", "MazePWA - Alan Jiménez")</title>
         <link
             href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
             rel="stylesheet"
@@ -19,7 +19,7 @@
                 color: #e2e8f0;
             }
         </style>
-
+        @laravelPWA
         @vite(["resources/css/app.css", "resources/js/app.js"])
     </head>
     <body class="font-sans text-gray-900 antialiased">

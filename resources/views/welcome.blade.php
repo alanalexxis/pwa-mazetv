@@ -157,7 +157,6 @@
                     modernas. Cada miembro aporta habilidades únicas para crear
                     una experiencia de usuario excepcional.
                 </p>
-                <!-- Aquí puedes agregar información sobre los miembros del equipo si lo deseas -->
             </div>
         </div>
     </div>
