@@ -19,6 +19,7 @@
                 color: #e2e8f0;
             }
         </style>
+        @laravelPWA
     </head>
     <body class="flex min-h-screen flex-col font-sans antialiased">
         <nav class="bg-gradient-to-r from-slate-900 to-slate-800 shadow-lg">
@@ -171,6 +172,33 @@
         >
             <div class="container mx-auto px-4">
                 @yield("content")
+                <!-- ... -->
+                <div
+                    x-data="{ online: navigator.onLine, showRestored: false }"
+                    x-init="
+                        window.addEventListener('online', () => {
+                            online = true
+                            showRestored = true
+                            setTimeout(() => (showRestored = false), 3000) // El mensaje desaparece después de 3 segundos
+                        })
+                        window.addEventListener('offline', () => (online = false))
+                    "
+                >
+                    <div
+                        x-show="!online"
+                        class="fixed bottom-0 left-0 right-0 bg-red-500 py-2 text-center text-white"
+                    >
+                        No hay conexión a Internet
+                    </div>
+                    <div
+                        x-show="showRestored"
+                        class="fixed bottom-0 left-0 right-0 bg-green-500 py-2 text-center text-white"
+                    >
+                        Conexión a Internet restaurada
+                    </div>
+                </div>
+
+                <!-- ... -->
             </div>
         </main>
         <footer class="bg-slate-900 py-6 text-center text-sm text-gray-400">

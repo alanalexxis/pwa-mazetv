@@ -19,6 +19,7 @@
                 color: #e2e8f0;
             }
         </style>
+        @laravelPWA
     </head>
     <body class="flex min-h-screen flex-col font-sans antialiased">
         <nav class="bg-gradient-to-r from-slate-900 to-slate-800 shadow-lg">
