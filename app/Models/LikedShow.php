@@ -1,4 +1,5 @@
 <?php
+// app/Models/LikedShow.php
 
 namespace App\Models;
 
@@ -9,6 +10,6 @@ class LikedShow extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'show_id'];
+    protected $fillable = ['user_id', 'show_id', 'show_name', 'show_image', 'show_premiered', 'show_url'];
     public $timestamps = false;
 }

@@ -22,6 +22,9 @@ class LikedShowController extends Controller
                 'user_id' => auth()->id(),
                 'show_id' => $request->show_id,
                 'show_name' => $request->show_name,
+                'show_image' => $request->show_image,
+                'show_premiered' => $request->show_premiered,
+                'show_url' => $request->show_url,
             ]);
             return response()->json(['success' => true, 'action' => 'added']);
         }

@@ -49,10 +49,13 @@
                             </a>
                             <button
                                 class="favorite-btn absolute right-2 top-2 z-10 rounded-full bg-white p-2 text-red-500 opacity-0 transition-all duration-300 hover:text-red-600 group-hover:opacity-100"
-                                onclick="toggleFavorite(this, '{{ $show["show"]["id"] }}', '{{ $show["show"]["name"] }}')"
+                                onclick="toggleFavorite(this, '{{ $show["show"]["id"] }}', '{{ $show["show"]["name"] }}', '{{ $show["show"]["image"]["medium"] ?? "https://via.placeholder.com/210x295?text=No+Image" }}', '{{ $show["show"]["premiered"] ?? "N/A" }}', '{{ $show["show"]["url"] }}')"
                                 aria-label="Añadir a favoritos"
                                 data-show-id="{{ $show["show"]["id"] }}"
                                 data-show-name="{{ $show["show"]["name"] }}"
+                                data-show-image="{{ $show["show"]["image"]["medium"] ?? "https://via.placeholder.com/210x295?text=No+Image" }}"
+                                data-show-premiered="{{ $show["show"]["premiered"] ?? "N/A" }}"
+                                data-show-url="{{ $show["show"]["url"] }}"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -112,10 +115,24 @@
     </div>
 
     <script>
-        function toggleFavorite(button, showId, showName) {
+        document.addEventListener('DOMContentLoaded', function () {
+            // Obtener shows y guardar en localStorage
+            const shows = @json($shows);
+            localStorage.setItem('favoritedShows', JSON.stringify(shows));
+        });
+        function toggleFavorite(
+            button,
+            showId,
+            showName,
+            showImage,
+            showPremiered,
+            showUrl,
+        ) {
             console.log('Show ID:', showId);
             console.log('Show Name:', showName);
-
+            console.log('Show Image:', showImage);
+            console.log('Show Premiered:', showPremiered);
+            console.log('Show Url:', showUrl);
             // Add animation classes
             button.classList.add('animate-favorite');
             const icon = button.querySelector('svg');
@@ -137,6 +154,9 @@
                 body: JSON.stringify({
                     show_id: showId,
                     show_name: showName,
+                    show_image: showImage,
+                    show_premiered: showPremiered,
+                    show_url: showUrl,
                 }),
             })
                 .then((response) => response.json())

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -7,7 +6,6 @@ use Illuminate\Support\Facades\Http;
 
 class MovieController extends Controller
 {
-
     public function search(Request $request)
     {
         $query = $request->input('query');
@@ -22,14 +20,24 @@ class MovieController extends Controller
         // Si no hay consulta, cargar los shows favoritos del usuario
         if (empty($query)) {
             foreach ($favoritedShows as $showId) {
-                $response = Http::get("https://api.tvmaze.com/shows/{$showId}");
-                $shows[] = ['show' => $response->json()]; // Ajustar la estructura del array
+                try {
+                    $response = Http::get("https://api.tvmaze.com/shows/{$showId}");
+                    $shows[] = ['show' => $response->json()]; // Ajustar la estructura del array
+                } catch (\Exception $e) {
+                    // Si no se puede conectar a la API, retornar la vista offline
+                    return view('vendor/laravelpwa/offline');
+                }
             }
         } else {
-            $response = Http::get("https://api.tvmaze.com/search/shows", [
-                'q' => $query
-            ]);
-            $shows = $response->json();
+            try {
+                $response = Http::get("https://api.tvmaze.com/search/shows", [
+                    'q' => $query
+                ]);
+                $shows = $response->json();
+            } catch (\Exception $e) {
+                // Si no se puede conectar a la API, retornar la vista offline
+                return view('vendor/laravelpwa/offline');
+            }
         }
 
         return view('movies.search', compact('shows', 'query', 'favoritedShows'));

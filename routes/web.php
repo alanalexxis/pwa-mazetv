@@ -8,6 +8,9 @@ use App\Http\Controllers\LikedShowController;
 Route::get('/', function () {
     return view('/welcome');
 });
+Route::get('/offline', function () {
+    return view('vendor/laravelpwa/offline');
+});
 
 // Actualiza la ruta del dashboard para usar el controlador MovieController
 Route::get('/dashboard', [MovieController::class, 'search'])->middleware(['auth', 'verified'])->name('dashboard');
