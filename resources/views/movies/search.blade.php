@@ -1,7 +1,7 @@
 @extends("layouts.movies")
 
 @section("content")
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto px-4 py-8">
         @if (isset($query))
             <h2 class="mb-8 text-center text-4xl font-bold text-red-500">
                 Resultados de búsqueda para "{{ $query }}"
@@ -18,70 +18,61 @@
             >
                 @foreach ($shows as $show)
                     <div
-                        class="movie-card group relative overflow-hidden rounded-lg shadow-lg"
+                        class="movie-card group relative cursor-pointer overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:scale-105"
+                        onclick="openModal('{{ $show["show"]["id"] }}')"
                     >
                         <img
                             src="{{ $show["show"]["image"]["medium"] ?? "https://via.placeholder.com/210x295?text=No+Image" }}"
                             alt="{{ $show["show"]["name"] }}"
-                            class="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                            class="h-auto w-full object-cover"
                         />
                         <div
-                            class="movie-overlay absolute inset-0 flex flex-col justify-end bg-black bg-opacity-50 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                            class="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                        ></div>
+                        <div
+                            class="absolute bottom-0 left-0 right-0 p-4 text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                         >
-                            <h3
-                                class="mb-2 truncate text-lg font-bold text-white"
-                            >
+                            <h3 class="truncate text-lg font-bold">
                                 {{ $show["show"]["name"] }}
                             </h3>
-                            <p class="mb-3 text-sm text-gray-300">
+                            <p class="text-sm text-gray-300">
                                 @if ($show["show"]["premiered"])
                                     {{ \Carbon\Carbon::parse($show["show"]["premiered"])->format("Y") }}
                                 @else
                                         N/A
                                 @endif
                             </p>
-                            <a
-                                href="{{ $show["show"]["url"] }}"
-                                target="_blank"
-                                class="rounded-full bg-red-500 px-4 py-2 text-center text-white transition-colors duration-300 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        </div>
+                        <button
+                            class="favorite-btn absolute right-2 top-2 z-10 rounded-full bg-white p-2 text-red-500 opacity-0 transition-all duration-300 hover:text-red-600 group-hover:opacity-100"
+                            onclick="event.stopPropagation(); toggleFavorite(this, '{{ $show["show"]["id"] }}', '{{ $show["show"]["name"] }}', '{{ $show["show"]["image"]["medium"] ?? "https://via.placeholder.com/210x295?text=No+Image" }}', '{{ $show["show"]["premiered"] ?? "N/A" }}', '{{ $show["show"]["url"] }}')"
+                            aria-label="Añadir a favoritos"
+                            data-show-id="{{ $show["show"]["id"] }}"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="{{ in_array($show["show"]["id"], $favoritedShows) ? "fill-current text-red-600" : "" }} h-6 w-6 transition-all duration-300"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                fill="none"
                             >
-                                Más Información
-                            </a>
-                            <button
-                                class="favorite-btn absolute right-2 top-2 z-10 rounded-full bg-white p-2 text-red-500 opacity-0 transition-all duration-300 hover:text-red-600 group-hover:opacity-100"
-                                onclick="toggleFavorite(this, '{{ $show["show"]["id"] }}', '{{ $show["show"]["name"] }}', '{{ $show["show"]["image"]["medium"] ?? "https://via.placeholder.com/210x295?text=No+Image" }}', '{{ $show["show"]["premiered"] ?? "N/A" }}', '{{ $show["show"]["url"] }}')"
-                                aria-label="Añadir a favoritos"
-                                data-show-id="{{ $show["show"]["id"] }}"
-                                data-show-name="{{ $show["show"]["name"] }}"
-                                data-show-image="{{ $show["show"]["image"]["medium"] ?? "https://via.placeholder.com/210x295?text=No+Image" }}"
-                                data-show-premiered="{{ $show["show"]["premiered"] ?? "N/A" }}"
-                                data-show-url="{{ $show["show"]["url"] }}"
-                            >
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="{{ in_array($show["show"]["id"], $favoritedShows) ? "fill-current text-red-600" : "" }} h-6 w-6 transition-all duration-300"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                    fill="none"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                                    />
-                                </svg>
-                            </button>
-                            <div
-                                class="favorite-message absolute left-2 top-2 z-10 rounded-full bg-white px-2 py-1 text-sm text-red-500 opacity-0 transition-all duration-300"
-                            >
-                                <span class="add-message">
-                                    Agregado a favoritos
-                                </span>
-                                <span class="remove-message hidden">
-                                    Eliminado de favoritos
-                                </span>
-                            </div>
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                                />
+                            </svg>
+                        </button>
+                        <div
+                            class="favorite-message absolute left-2 top-2 z-10 rounded-full bg-white px-2 py-1 text-sm text-red-500 opacity-0 transition-all duration-300"
+                        >
+                            <span class="add-message">
+                                Agregado a favoritos
+                            </span>
+                            <span class="remove-message hidden">
+                                Eliminado de favoritos
+                            </span>
                         </div>
                     </div>
                 @endforeach
@@ -106,6 +97,7 @@
                     No se encontraron shows.
                 </p>
                 <a
+                    href="{{ route("dashboard") }}"
                     class="mt-4 rounded-full bg-red-500 px-6 py-2 text-white transition-colors duration-300 hover:bg-red-600"
                 >
                     Prueba a buscar o añadir shows
@@ -114,12 +106,47 @@
         @endif
     </div>
 
+    <!-- Modal -->
+    <div
+        id="showModal"
+        class="fixed inset-0 z-50 flex hidden items-center justify-center overflow-auto bg-black bg-opacity-60"
+    >
+        <div class="mx-4 w-full max-w-2xl rounded-lg bg-black p-8">
+            <div class="mb-4 flex items-center justify-between">
+                <h2
+                    id="modalTitle"
+                    class="text-2xl font-bold text-gray-400"
+                ></h2>
+                <button
+                    onclick="closeModal()"
+                    class="text-gray-600 hover:text-gray-400"
+                >
+                    <svg
+                        class="h-6 w-6"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"
+                        ></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="modalContent" class="text-gray-400"></div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Obtener shows y guardar en localStorage
             const shows = @json($shows);
             localStorage.setItem('favoritedShows', JSON.stringify(shows));
         });
+
         function toggleFavorite(
             button,
             showId,
@@ -194,6 +221,42 @@
                     }, 500);
                 });
         }
+
+        function openModal(showId) {
+            const shows = JSON.parse(localStorage.getItem('favoritedShows'));
+            const show = shows.find((s) => s.show.id == showId);
+
+            if (show) {
+                document.getElementById('modalTitle').textContent =
+                    show.show.name;
+                document.getElementById('modalContent').innerHTML = `
+            <div class="flex flex-col md:flex-row">
+                <img src="${show.show.image?.medium || 'https://via.placeholder.com/210x295?text=No+Image'}" alt="${show.show.name}" class="w-full md:w-1/3 object-cover rounded-lg mb-4 md:mb-0 md:mr-4">
+                <div>
+                    <p class="mb-2"><strong>Fecha de estreno:</strong> ${show.show.premiered || 'N/A'}</p>
+                    <p class="mb-2"><strong>Status:</strong> ${show.show.status || 'N/A'}</p>
+                    <p class="mb-2"><strong>Género:</strong> ${show.show.genres?.join(', ') || 'N/A'}</p>
+                    <p class="mb-4"><strong>Resumen:</strong> ${show.show.summary || 'No summary available.'}</p>
+                    <a href="${show.show.url}" target="_blank" class="mt-8 inline-block bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 transition-colors duration-300">Ver en TVMaze</a>
+                </div>
+            </div>
+        `;
+                document.getElementById('showModal').classList.remove('hidden');
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('showModal').classList.add('hidden');
+        }
+
+        // Close modal when clicking outside
+        document
+            .getElementById('showModal')
+            .addEventListener('click', function (event) {
+                if (event.target === this) {
+                    closeModal();
+                }
+            });
     </script>
 
     <style>
@@ -227,10 +290,6 @@
 
         .animate-favorite-icon {
             animation: favorite-icon 0.5s ease-in-out;
-        }
-
-        .favorite-message {
-            transition: opacity 0.3s ease-in-out;
         }
     </style>
 @endsection
