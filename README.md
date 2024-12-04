@@ -34,7 +34,7 @@ MazePWA es una aplicación web progresiva (PWA) que ofrece a los usuarios una ex
 1. Clona el repositorio:
 
     ```sh
-    git clone https://github.com/tu-usuario/mazepwa.git
+    git clone https://github.com/alanalexxis/pwa-mazetv.git
     cd mazepwa
     ```
 
@@ -85,5 +85,6 @@ MazePWA es una aplicación web progresiva (PWA) que ofrece a los usuarios una ex
 
 Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
 
-Autor 👨‍💻
+## Autor 👨‍💻
+
 Creado con ❤️ por AlanAlexxis.
